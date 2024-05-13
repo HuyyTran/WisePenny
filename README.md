@@ -1,6 +1,6 @@
 # Wise Penny
 
-## Overview
+## About the project
 Wise Penny is a comprehensive budgeting and financial management web application designed to help users track and analyze their financial activities efficiently. This application provides an intuitive user interface with powerful tools to manage your personal finances effectively.
 
 ## Table of Contents
