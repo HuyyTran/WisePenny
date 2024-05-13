@@ -1,0 +1,75 @@
+<%- include("partials/header"); -%>
+
+<section class="transaction-form">
+  <h1>Add transaction</h1>
+  <form action="" action="/input" method="post">
+    <div class="form-group">
+      <label class="up-label">Amount</label>
+      <input type="number" class="form-control" name="amount" />
+      <div class="input-group mb-3 mt-4">
+        <label class="input-group-text" for="inputType">Income/Expense</label>
+        <select class="form-select" id="inputType" name="type">
+          <option selected>Choose...</option>
+          <option value="1">Income</option>
+          <option value="2">Expense</option>
+        </select>
+      </div>
+      <select class="form-select" id="category-select" name="category">
+        <option selected>Choose...</option>
+      </select>
+      <label class="up-label">Date</label>
+      <input type="date" class="form-control" name="day" />
+    </div>
+    <div id="transaction-button">
+      <button
+        class="header-btn btn btn-success mt-3"
+        type="submit"
+        name="button"
+      >
+        Save
+      </button>
+      <a href="/"
+        ><button type="button " class="header-btn btn btn-success mt-3">
+          Back
+        </button></a
+      >
+    </div>
+  </form>
+</section>
+<!-- JavaScript -->
+<script>
+  const typeSelect = document.getElementById("inputType");
+  const categorySelect = document.getElementById("category-select");
+
+  // Create an object that maps each fruit to its possible colors
+  const categoryType = {
+    1: ["Collect Interest", "Salary", "Other Income"],
+    2: [
+      "Food & Beverage",
+      "Transportation",
+      "Rentals",
+      "Bills",
+      "Fun & Relax",
+      "Education",
+      "Other Expense",
+    ],
+  };
+
+  // Update the color select options based on the selected fruit
+  typeSelect.addEventListener("change", () => {
+    const type = typeSelect.value;
+    const categories = categoryType[type] || [];
+    categorySelect.innerHTML = "";
+    const option = document.createElement("option");
+    option.text = "Choose...";
+    categorySelect.add(option);
+    categories.forEach((category) => {
+      const option = document.createElement("option");
+      option.value = category;
+      option.text = category;
+      categorySelect.add(option);
+    });
+  });
+</script>
+
+<%- include("partials/footer"); -%>

@@ -1,0 +1,106 @@
+<%- include("partials/header"); -%>
+<%let dataIncome = 0;%>
+<%let dataExpense = 0;%>
+<%for(let i=0; i<moneyData.length; i++){%>
+    <%if(moneyData[i].type == "1"){%>
+      <%dataIncome += moneyData[i].amount;%>
+    <%}else if(moneyData[i].type == "2"){%>
+      <%dataExpense -= moneyData[i].amount;%>
+    <%}%>  
+<%}%>
+<body>
+  <nav class="nav flex-column tabs-fixed">
+    <div class="list-item">
+      <div>
+        <a class="nav-link active" aria-current="page" href="#"
+          ><i class="fa-solid fa-bars fa-2xl"></i
+        ></a>
+      </div>
+
+      <div class="item first-item">       
+        <a class="nav-link" href="/"><i class="fa-regular fa-credit-card fa-xl"></i> <br />Transactions</a>
+      </div>
+      <hr />
+      <div class="item">      
+        <a class="nav-link" href="/report" style="color: #017e84;"><i class="fa-regular fa-newspaper fa-xl"></i> <br />Report</a>
+      </div>
+    </div>
+  </nav>
+    <section id="nav">
+      <div class="fixed-header">
+        <div class="toolbar-container row">
+          <div class="left-toolbar col">
+            <div class="wallet-toolbar-menu container">
+              <div class="row">
+                <div class="col wallet-col">
+                  <i class="fa-sharp fa-solid fa-wallet fa-2xl"></i>
+                </div>
+                <div class="col">
+                  <div class="row account-name">trial</div>
+                  <div class="row bank-balance"><%=dataIncome + dataExpense %>đ</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <nav class="right-toolbar col">
+            <i class="fa-regular fa-calendar"></i>
+            <i class="fa-solid fa-eye"></i>
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <a href="/input"><button type="button " class="header-btn btn btn-success">
+              ADD TRANSACTION
+            </button></a>
+          </nav>
+        </div>
+      </div>        
+    </section>
+    
+    <section id="content">
+        <div class="row ">
+            <div class="col-lg-5 reportContent">
+                <div class="row balance">
+                    <div class="col-lg-6 textContent ">
+                        <p class="moneyType">Opening Balance</p> 
+                        <p class="money">0đ</p>
+                    </div>
+                    <div class="col-lg-6 textContent">
+                        <p class="moneyType">Ending Balance</p> 
+                        <p class="money"><%=dataIncome + dataExpense %>đ</p>
+                    </div>
+                </div>
+                <hr>
+                <a href="#" style="text-decoration:none">
+                    <div class="dashboard hov">
+                        <p class="moneyType">Net Income</p> 
+                        <p class="money"><%=dataIncome + dataExpense %>đ</p>
+                        <canvas id="myChart"></canvas>
+                    </div>
+                </a>  
+                <hr>
+                <div class="row balance">
+                <div class="col-lg-6 incomeContent hov">
+                    <a href="#" style="text-decoration:none">
+                        <div>
+                                        <p class="moneyType">Income</p> 
+                                        <p class="moneyIncome"><%=dataIncome%>đ</p>
+                                        <canvas id="myPieChart"></canvas>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-lg-6 expenseContent hov">
+                                <a href="#" style="text-decoration:none">
+                                    <div>
+                                        <p class="moneyType">Expense</p> 
+                                        <p class="moneyExpense"><%= dataExpense %>đ</p>
+                                        <canvas id="myPieChart2"></canvas>
+                                    </div>
+                                </a>   
+                            </div>
+                        </div>           
+            </div>
+        </div>
+    </section>
+    
+    <%- include("chart",{moneyData: moneyData,moneyPieData: moneyPieData}); -%>
+    
+</body>
+<%- include("partials/footer"); -%>

@@ -1,0 +1,118 @@
+<%let dataBarIncome = [];%>
+<%let dataBarExpense = [];%>
+<%for(let i=0; i<moneyData.length; i++){%>
+    <%if(moneyData[i].type == "1"){%>
+      <%dataBarIncome[moneyData[i].day.getDate()-1] = moneyData[i].amount;%>
+    <%}else{%>
+      <%dataBarExpense[moneyData[i].day.getDate()-1]=-1*moneyData[i].amount;%>
+    <%}%>  
+<%}%>
+<%let dataPieIncomeLabel=["Collect Interest", "Salary","Other Income"];%>
+<%let dataPieIncome=[];%>
+<%let dataPieExpenseLabel=["Food & Beverage","Transportation","Rentals","Bills","Other Expense","Fun & Relax","Education"];%>
+<%let dataPieExpense=[];%>
+<%for(let i=0; i<moneyPieData.length; i++){%>
+  <%if(moneyPieData[i].type == "1"){%>
+    <%for(let j=0; j<dataPieIncomeLabel.length;j++){%>
+      <%if(moneyPieData[i].category == dataPieIncomeLabel[j]){dataPieIncome[j] = moneyPieData[i].amount;break;}%>
+      <%}%>
+  <%}else{%>
+    <%for(let j=0; j<dataPieExpenseLabel.length;j++){%>
+      <%if(moneyPieData[i].category == dataPieExpenseLabel[j]){dataPieExpense[j] = moneyPieData[i].amount;break;}%>
+      <%}%>
+  <%}%>  
+<%}%>
+
+
+
+<script>
+    var ctx = document.getElementById("myChart").getContext('2d');
+var data = {
+    labels: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31],
+    datasets: [{
+    label: "Income",
+    data: [<%= dataBarIncome.join(',') %>],
+    backgroundColor: '#19a7ce', 
+    },{
+    label: "Expense",
+    data: [<%= dataBarExpense.join(',') %>],
+    backgroundColor: '#e49393',
+    }]
+};
+var myChart = new Chart(ctx, {
+type: 'bar',
+data: data,
+    options: {
+        scales: {
+        xAxes: [{
+            stacked: true,
+            gridLines: {display: false},
+            barPercentage: 0.5,
+            categoryPercentage: 0.8
+            }],
+        yAxes: [{
+            stacked: true,
+            ticks: {beginAtZero:true}
+            }]
+        },
+        legend: {
+            display: false,
+        },
+        
+}
+});
+
+var ctx1 = document.getElementById('myPieChart').getContext('2d');
+
+// Define the data for the pie chart
+var data1 = {
+  labels: ["Collect Interest", "Salary","Other Income"],
+  datasets: [{
+    data: [<%= dataPieIncome.join(',') %>],
+    backgroundColor: ['#439A97','#62B6B7','#97DECE']
+  }]
+};
+
+// Create the pie chart
+var myPieChart = new Chart(ctx1, {
+  type: 'doughnut',
+  data: data1,
+  options: {
+    responsive: true,
+    legend: {
+        display: false,
+      }
+  }
+});
+
+var ctx2 = document.getElementById('myPieChart2').getContext('2d');
+
+// Define the data for the pie chart
+var data2 = {
+  labels: ["Food & Beverage","Transportation","Rentals","Bills","Other Expense","Fun & Relax","Education"],
+  datasets: [{
+    data: [<%= dataPieExpense.join(',') %>],
+    backgroundColor: [
+      '#FF597B',
+      '#FF8E9E',
+      '#F47C7C',
+      '#EF9F9F',
+      '#FAD4D4',
+      '#F9B5D0',
+      '#FFF2F2'
+    ]
+  }]
+};
+
+// Create the pie chart
+var myPieChart2 = new Chart(ctx2, {
+  type: 'doughnut',
+  data: data2,
+  options: {
+    responsive: true,
+    legend: {
+        display: false,
+      }
+  }
+});
+</script>

@@ -1,0 +1,303 @@
+<%- include("partials/header"); -%>
+<%let dataIncome = 0;%>
+<%let dataExpense = 0;%>
+<%for(let i=0; i<moneyData.length; i++){%>
+    <%if(moneyData[i].type == "1"){%>
+      <%dataIncome += moneyData[i].amount;%>
+    <%}else if(moneyData[i].type == "2"){%>
+      <%dataExpense -= moneyData[i].amount;%>
+    <%}%>  
+<%}%>
+<%let dataDay1 = [];%>
+<%let dataDay2 = [];%>
+<%let dataDay3 = [];%>
+<%let maxDay = [];%>
+<%const earliestDay = new Date(1, 0, 1);%>
+<%maxDay[0]=maxDay[1]=maxDay[2]=earliestDay;%>
+<%if(moneyData.length>0){%>
+  <%for(let i=0; i<moneyData.length; i++){%>
+    <%if(moneyData[i].day >= maxDay[0]){%>
+      <%if(moneyData[i].day > maxDay[0]){%>
+      <%maxDay[2]=maxDay[1]; maxDay[1]=maxDay[0]; %>
+      <%maxDay[0] = moneyData[i].day;%>
+      <%}%>
+    <%}else if(moneyData[i].day >= maxDay[1]){%>
+      <%if(moneyData[i].day > maxDay[1]){%>
+      <%maxDay[2]=maxDay[1];%>
+      <%maxDay[1] = moneyData[i].day;%>
+      <%}%>
+    <%}else if(moneyData[i].day >= maxDay[2]){%>
+      <%maxDay[2] = moneyData[i].day;%>
+    <%}%>
+  <%}%>
+<%}%>
+<%let sum1 = 0;%>
+<%let sum2 = 0;%>
+<%let sum3 = 0;%>
+<%for(let i=0; i<moneyData.length; i++){%>
+    <%if(moneyData[i].day.getDate() == maxDay[0].getDate()){%>
+      <%dataDay1.push(moneyData[i]);%>
+      <%sum1+=moneyData[i].amount;%>
+    <%}else if(moneyData[i].day.getDate() == maxDay[1].getDate()){%>
+      <%dataDay2.push(moneyData[i]);%>
+      <%sum2+=moneyData[i].amount;%>
+    <%}else if(moneyData[i].day.getDate() == maxDay[2].getDate()){%>
+      <%dataDay3.push(moneyData[i]);%>
+      <%sum3+=moneyData[i].amount;%>
+    <%}%>
+  <%}%> 
+  <%function getSrc(cate) {%>
+    <%if(cate == "Collect Interest"){return 0;}%>
+    <%if(cate == "Salary"){return 1;}%>
+    <%if(cate == "Other Income"){return 2;}%>
+    <%if(cate == "Food & Beverage"){return 3;}%>
+    <%if(cate == "Transportation"){return 4;}%>
+    <%if(cate == "Rentals"){return 5;}%>
+    <%if(cate == "Bills"){return 6;}%>
+    <%if(cate == "Other Expense"){return 7;}%>
+    <%if(cate == "Fun & Relax"){return 8;}%>
+    <%if(cate == "Education"){return 9;}%>
+    return 10;
+  <%}%>
+  <%const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];%>
+  <%const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];%>
+  <%const imgSrc = ["https://static.moneylover.me/img/icon/icon_118.png","https://static.moneylover.me/img/icon/ic_category_salary.png","https://static.moneylover.me/img/icon/ic_category_other_income.png","https://static.moneylover.me/img/icon/ic_category_foodndrink.png","https://static.moneylover.me/img/icon/ic_category_transport.png","https://static.moneylover.me/img/icon/icon_136.png","https://static.moneylover.me/img/icon/icon_138.png","https://static.moneylover.me/img/icon/ic_category_other_expense.png","https://static.moneylover.me/img/icon/icon_49.png","https://static.moneylover.me/img/icon/ic_category_education.png"];%>
+  <body>
+    <div class="transaction-content">
+      <!--------------------- Tabs bar------------ -->
+      <nav class="nav flex-column tabs-fixed">
+        <div class="list-item">
+          <div>
+            <a class="nav-link active" aria-current="page" href="#"
+              ><i class="fa-solid fa-bars fa-2xl"></i
+            ></a>
+          </div>
+
+          <div class="item first-item">
+            <a class="nav-link" href="/" style="color: #017e84;"><i class="fa-regular fa-credit-card fa-xl"></i> <br />Transactions</a>
+          </div>
+          <hr />
+          <div class="item">
+            <a class="nav-link" href="/report" ><i class="fa-regular fa-newspaper fa-xl"></i> <br />Report</a>
+          </div>
+        </div>
+      </nav>
+
+      <div class="master-detail-container">
+        <!---------------- Header ------------------->
+        <div class="fixed-header">
+          <div class="toolbar-container row">
+            <div class="left-toolbar col">
+              <div class="wallet-toolbar-menu container">
+                <div class="row">
+                  <div class="col wallet-col">
+                    <i class="fa-sharp fa-solid fa-wallet fa-2xl"></i>
+                  </div>
+                  <div class="col">
+                    <div class="row account-name">trial</div>
+                    <div class="row bank-balance"><%=dataIncome + dataExpense %>đ</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <nav class="right-toolbar col">
+              <i class="fa-regular fa-calendar"></i>
+              <i class="fa-solid fa-eye"></i>
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <a href="/input"><button type="button " class="header-btn btn btn-success">
+                ADD TRANSACTION
+              </button></a>
+            </nav>
+          </div>
+        </div>
+        <!------------------ Transaction---------------->
+        <div class="master-container shadow p-3 mb-5 bg-white rounded">
+          <!-- Date Navbar -->
+          <ul class="date-nav nav justify-content-center flex-sm-row">
+            <li class="nav-item">
+              <a class="nav-link last-month" href="#">Last month</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#"
+                >This month</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link future" href="#">Future</a>
+            </li>
+          </ul>
+
+          <hr class="first-hr" />
+
+          <!-- Transaction div-2 -->
+          <div class="transaction-div2">
+            <div class="Inflow">
+              <div class="left">
+                Inflow
+                <span class="right"><%=dataIncome%>đ</span>
+              </div>
+            </div>
+            <div class="Outflow">
+              <div class="left">
+                Outflow
+                <span class="right"><%=dataExpense %>đ</span>
+              </div>
+            </div>
+            <div class="Total-amount">
+              <div class="line"></div>
+              <span class="total-right"><%=dataIncome + dataExpense %>đ</span>
+            </div>
+            <a href="/report" style="text-decoration: none;"><div class="view-report">VIEW REPORT FOR THIS PERIOD</div></a>
+          </div>
+          <!--------------Transaction card -->
+          <section class="transaction-card">
+            <%if(dataDay1.length > 0){%>
+              <div class="space-between"></div>
+            <div class="daily-transaction">
+              <div class="transaction-header container">
+                <div class="date-view">
+                  <div class="row">
+                    <div class="col">
+                      <span class="view-day"><%=maxDay[0].getDate()%></span>
+                    </div>
+                    <div class="col second-col">
+                      <span class="days"><%=daysOfWeek[maxDay[0].getDay()]%></span>
+                      <span class="months"><%=months[maxDay[0].getMonth()]%> <%=maxDay[0].getFullYear()%></span>
+                    </div>
+                  </div>
+                </div>
+                <%let sum=0;%>
+                <%for(let i=0; i<dataDay1.length; i++){%>
+                  <%if(dataDay1[i].type == "1"){%>
+                    <%sum += dataDay1[i].amount;%>
+                  <%}else if(dataDay1[i].type == "2"){%>
+                    <%sum -= dataDay1[i].amount;%>
+                  <%}%>  
+                <%}%>
+                <div class="amount-view">
+                  <span class="amount"><%=sum%>đ</span>
+                </div>
+              </div>
+              <!-- <hr /> -->
+              <%for(let i=0; i<dataDay1.length; i++){%>
+                <div class="daily-transaction-div">
+                  <img src=<%=imgSrc[getSrc(dataDay1[i].category)]%> alt="">
+                  <div class="daily-data">
+                    <span class="transaction-row">
+                      <span class="transaction-name"><%=dataDay1[i].category%></span>
+                      <%if(dataDay1[i].type == "1"){%>
+                        <span class="amount income"><%=dataDay1[i].amount%>đ</span>
+                        <%}else{%>
+                        <span class="amount expense">-<%=dataDay1[i].amount%>đ</span>
+                        <%}%>
+                    </span>
+                    <p class="secondary-text">Notice</p>
+                  </div>
+                </div>
+                <%}%> 
+              </div>
+              
+            <%}%>
+            
+            <%if(dataDay2.length > 0){%>
+              <div class="space-between"></div>
+            <div class="daily-transaction">
+              <div class="transaction-header container">
+                <div class="date-view">
+                  <div class="row">
+                    <div class="col">
+                      <span class="view-day"><%=maxDay[1].getDate()%></span>
+                    </div>
+                    <div class="col second-col">
+                      <span class="days"><%=daysOfWeek[maxDay[1].getDay()]%></span>
+                      <span class="months"><%=months[maxDay[1].getMonth()]%> <%=maxDay[1].getFullYear()%></span>
+                    </div>
+                  </div>
+                </div>
+                <%let sum=0;%>
+                <%for(let i=0; i<dataDay2.length; i++){%>
+                  <%if(dataDay2[i].type == "1"){%>
+                    <%sum += dataDay2[i].amount;%>
+                  <%}else if(dataDay2[i].type == "2"){%>
+                    <%sum -= dataDay2[i].amount;%>
+                  <%}%>  
+                <%}%>
+                <div class="amount-view">
+                  <span class="amount"><%=sum%>đ</span>
+                </div>
+              </div>
+              <!-- <hr /> -->
+              <%for(let i=0; i<dataDay2.length; i++){%>
+                <div class="daily-transaction-div">
+                  <img src=<%=imgSrc[getSrc(dataDay2[i].category)]%> alt="">
+                  <div class="daily-data">
+                    <span class="transaction-row">
+                      <span class="transaction-name"><%=dataDay2[i].category%></span>
+                      <%if(dataDay2[i].type == "1"){%>
+                        <span class="amount income"><%=dataDay2[i].amount%>đ</span>
+                        <%}else{%>
+                        <span class="amount expense">-<%=dataDay2[i].amount%>đ</span>
+                        <%}%>
+                    </span>
+                    <p class="secondary-text">Notice</p>
+                  </div>
+                </div>
+                <%}%>
+              </div>
+               
+            <%}%>
+
+            <%if(dataDay3.length > 0){%>
+              <div class="space-between"></div>
+            <div class="daily-transaction">
+              <div class="transaction-header container">
+                <div class="date-view">
+                  <div class="row">
+                    <div class="col">
+                      <span class="view-day"><%=maxDay[2].getDate()%></span>
+                    </div>
+                    <div class="col second-col">
+                      <span class="days"><%=daysOfWeek[maxDay[2].getDay()]%></span>
+                      <span class="months"><%=months[maxDay[2].getMonth()]%> <%=maxDay[2].getFullYear()%></span>
+                    </div>
+                  </div>
+                </div>
+                <%let sum=0;%>
+                <%for(let i=0; i<dataDay3.length; i++){%>
+                  <%if(dataDay3[i].type == "1"){%>
+                    <%sum += dataDay3[i].amount;%>
+                  <%}else if(dataDay3[i].type == "2"){%>
+                    <%sum -= dataDay3[i].amount;%>
+                  <%}%>  
+                <%}%>
+                <div class="amount-view">
+                  <span class="amount"><%=sum%>đ</span>
+                </div>
+              </div>
+              <!-- <hr /> -->
+              <%for(let i=0; i<dataDay3.length; i++){%>
+                <div class="daily-transaction-div">
+                  <img src=<%=imgSrc[getSrc(dataDay3[i].category)]%> alt="">
+                  <div class="daily-data">
+                    <span class="transaction-row">
+                      <span class="transaction-name"><%=dataDay3[i].category%></span>
+                      <%if(dataDay3[i].type == "1"){%>
+                        <span class="amount income"><%=dataDay3[i].amount%>đ</span>
+                        <%}else{%>
+                        <span class="amount expense">-<%=dataDay3[i].amount%>đ</span>
+                        <%}%>
+                    </span>
+                    <p class="secondary-text">Notice</p>
+                  </div>
+                </div>
+                <%}%> 
+              </div>
+              
+            <%}%> 
+          </section>
+        </div>
+      </div>
+    </div>
+  </body>
+
+<%- include("partials/footer"); -%>
