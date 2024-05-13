@@ -16,8 +16,11 @@ Wise Penny is a comprehensive budgeting and financial management web application
 - **Customizable Categories:** Users can customize expense categories for precise tracking.
 - **User-friendly Interface:** Designed for simplicity and ease of use to ensure that users can navigate and utilize features without hassle.
 
-## Deployment
-Wise Penny is currently deployed at [wise-penny.glitch.me](https://wise-penny.glitch.me). Visit the website to experience the application live.
+## ⚙ Our demo site
+
+- Here you can easily visit our SIMCAREER Web App with a live preview.
+
+🎯 <https://wise-penny.glitch.me/>
 
 ## Usage 
 Here’s how to navigate and use the Wise Penny application:
